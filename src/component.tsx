@@ -170,7 +170,7 @@ const STYLE_TEXT = `
 }
 `;
 
-interface DarkModeToggleProps extends HTMLAttributes<HTMLSpanElement> {
+export interface DarkModeToggleProps extends HTMLAttributes<HTMLSpanElement> {
   onClick?: (event: ReactMouseEvent<HTMLSpanElement>) => void;
   onModeChange?: (mode: ModeName) => void;
   size?: number | string;
