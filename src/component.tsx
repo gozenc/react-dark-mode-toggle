@@ -1,9 +1,25 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import type { HTMLAttributes, MouseEvent as ReactMouseEvent } from "react";
-import STYLE_TEXT from "./style.css?inline";
+import STYLE_CSS from "./style.css?inline";
 
 const { useEffect, useRef, useState, createElement: h, Fragment } = React;
+
+const ENUM_className = "rdmt";
+const ENUM_div = "div";
+const ENUM_circle = "circle";
+const ENUM_line = "line";
+const ENUM_full = "100%";
+const ENUM_null = 0;
+const ENUM_currentColor = "currentColor";
+const ENUM_defaultSize = 24;
+const ENUM_beamEnd = 4.22;
+const ENUM_beamStart = 5.64;
+const ENUM_x1 = ENUM_defaultSize - ENUM_beamStart;
+const ENUM_x2 = ENUM_defaultSize - ENUM_beamEnd;
+const ENUM_halfSize = ENUM_defaultSize / 2;
+const ENUM_quarter = ENUM_defaultSize / 4;
+
 export interface DarkModeToggleProps extends HTMLAttributes<HTMLSpanElement> {
   onClick?: (event: ReactMouseEvent<HTMLSpanElement>) => void;
   onModeChange?: (mode: ModeName) => void;
@@ -42,14 +58,13 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
   const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
 
   useEffect(() => {
-    if (!hostRef.current || shadowRoot) {
+    if (
+      !hostRef.current ||
+      shadowRoot ||
+      typeof hostRef.current.attachShadow !== "function"
+    ) {
       return;
     }
-
-    if (typeof hostRef.current.attachShadow !== "function") {
-      return;
-    }
-
     const root =
       hostRef.current.shadowRoot ??
       hostRef.current.attachShadow({
@@ -59,7 +74,7 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
   }, [shadowRoot]);
 
   const styleVariables = makeStyleVariables(padding, radius, size, colors);
-  const appliedSize = styleVariables["--rdmt-size"] ?? size ?? 24;
+  const appliedSize = styleVariables["--rdmt-size"] ?? size ?? ENUM_defaultSize;
 
   function handleToggle(event: ReactMouseEvent<HTMLDivElement>) {
     if (props.preventDefault === true) {
@@ -96,14 +111,18 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
         h(
           Fragment,
           null,
-          h("style", null, STYLE_TEXT),
+          h("style", null, STYLE_CSS),
           h(
-            "div",
-            { className: "rdmt", style: styleVariables, onClick: handleToggle },
+            ENUM_div,
+            {
+              className: ENUM_className,
+              style: styleVariables,
+              onClick: handleToggle,
+            },
             h(
-              "div",
+              ENUM_div,
               {
-                className: "rdmt_t",
+                className: `${ENUM_className}t`,
                 title: "Toggles light & dark",
                 "aria-label": "auto",
                 "aria-live": "polite",
@@ -111,58 +130,94 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
               h(
                 "svg",
                 {
-                  className: "rdmt_sm",
+                  className: `${ENUM_className}sm`,
                   "aria-hidden": "true",
                   width: appliedSize,
                   height: appliedSize,
-                  viewBox: "0 0 24 24",
+                  viewBox: `${ENUM_null} ${ENUM_null} ${ENUM_defaultSize} ${ENUM_defaultSize}`,
                 },
-                h("circle", {
-                  className: "rdmt_s",
-                  cx: "12",
-                  cy: "12",
-                  r: "6",
-                  mask: "url(#rdmt_m_m)",
-                  fill: "currentColor",
+                h(ENUM_circle, {
+                  className: `${ENUM_className}s`,
+                  cx: ENUM_halfSize,
+                  cy: ENUM_halfSize,
+                  r: ENUM_quarter,
+                  mask: `url(#${ENUM_className}mm)`,
+                  fill: ENUM_currentColor,
                 }),
                 h(
                   "g",
-                  { className: "rdmt_b", stroke: "currentColor" },
-                  h("line", { x1: "12", y1: "1", x2: "12", y2: "3" }),
-                  h("line", { x1: "12", y1: "21", x2: "12", y2: "23" }),
-                  h("line", { x1: "4.22", y1: "4.22", x2: "5.64", y2: "5.64" }),
-                  h("line", {
-                    x1: "18.36",
-                    y1: "18.36",
-                    x2: "19.78",
-                    y2: "19.78",
+                  {
+                    className: `${ENUM_className}b`,
+                    stroke: ENUM_currentColor,
+                  },
+                  h(ENUM_line, {
+                    x1: ENUM_halfSize,
+                    y1: "1",
+                    x2: ENUM_halfSize,
+                    y2: "3",
                   }),
-                  h("line", { x1: "1", y1: "12", x2: "3", y2: "12" }),
-                  h("line", { x1: "21", y1: "12", x2: "23", y2: "12" }),
-                  h("line", {
-                    x1: "4.22",
-                    y1: "19.78",
-                    x2: "5.64",
-                    y2: "18.36",
+                  h(ENUM_line, {
+                    x1: ENUM_halfSize,
+                    y1: ENUM_defaultSize - 3,
+                    x2: ENUM_halfSize,
+                    y2: ENUM_defaultSize - 1,
                   }),
-                  h("line", {
-                    x1: "18.36",
-                    y1: "5.64",
-                    x2: "19.78",
-                    y2: "4.22",
+                  h(ENUM_line, {
+                    x1: ENUM_beamEnd,
+                    y1: ENUM_beamEnd,
+                    x2: ENUM_beamStart,
+                    y2: ENUM_beamStart,
+                  }),
+                  h(ENUM_line, {
+                    x1: ENUM_x1,
+                    y1: ENUM_x1,
+                    x2: ENUM_x2,
+                    y2: ENUM_x2,
+                  }),
+                  h(ENUM_line, {
+                    x1: "1",
+                    y1: ENUM_halfSize,
+                    x2: "3",
+                    y2: ENUM_halfSize,
+                  }),
+                  h(ENUM_line, {
+                    x1: ENUM_defaultSize - 3,
+                    y1: ENUM_halfSize,
+                    x2: ENUM_defaultSize - 1,
+                    y2: ENUM_halfSize,
+                  }),
+                  h(ENUM_line, {
+                    x1: ENUM_beamEnd,
+                    y1: ENUM_x2,
+                    x2: ENUM_beamStart,
+                    y2: ENUM_x1,
+                  }),
+                  h(ENUM_line, {
+                    x1: ENUM_x1,
+                    y1: ENUM_beamStart,
+                    x2: ENUM_x2,
+                    y2: ENUM_beamEnd,
                   })
                 ),
                 h(
                   "mask",
-                  { className: "rdmt_m", id: "rdmt_m_m" },
+                  {
+                    className: `${ENUM_className}m`,
+                    id: `${ENUM_className}mm`,
+                  },
                   h("rect", {
-                    x: "0",
-                    y: "0",
-                    width: "100%",
-                    height: "100%",
+                    x: ENUM_null,
+                    y: ENUM_null,
+                    width: ENUM_full,
+                    height: ENUM_full,
                     fill: "white",
                   }),
-                  h("circle", { cx: "24", cy: "10", r: "6", fill: "black" })
+                  h(ENUM_circle, {
+                    cx: ENUM_defaultSize,
+                    cy: ENUM_halfSize - 2,
+                    r: ENUM_quarter,
+                    fill: "black",
+                  })
                 )
               )
             )
@@ -212,6 +267,5 @@ function makeStyleVariables(
   if (resolvedPadding) {
     styleVariables["--rdmt-padding"] = resolvedPadding;
   }
-
   return styleVariables;
 }

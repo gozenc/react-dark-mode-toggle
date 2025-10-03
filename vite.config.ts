@@ -31,17 +31,6 @@ export default defineConfig({
       },
       plugins: [terser()],
     },
-    // minify: "terser",
-    // terserOptions: {
-    //   compress: {
-    //     passes: 2,
-    //     pure_getters: true,
-    //     unsafe_comps: true,
-    //     unsafe: true,
-    //     module: true,
-    //   },
-    //   mangle: true,
-    // },
   },
   define: {
     "process.env.NODE_ENV": '"production"',
@@ -49,17 +38,33 @@ export default defineConfig({
 });
 
 function cssVarMinifier() {
-  const replacements: Array<[string, string]> = [
-    ["--rdmt-size", "--rdmt-s"],
-    ["--rdmt-padding", "--rdmt-p"],
-    ["--rdmt-bg-light", "--rdmt-bg-l"],
-    ["--rdmt-bg-dark", "--rdmt-bg-d"],
-    ["--rdmt-radius", "--rdmt-r"],
-    ["--rdmt-color-light", "--rdmt-c-l"],
-    ["--rdmt-color-dark", "--rdmt-c-d"],
-    ["--rdmt-color-hover-light", "--rdmt-c-h-l"],
-    ["--rdmt-color-hover-dark", "--rdmt-c-h-d"],
+  const variableReplacements: Array<[string, string]> = [
+    ["--rdmt-size", "--rdmts"],
+    ["--rdmt-padding", "--rdmtp"],
+    ["--rdmt-bg-light", "--rdmtbgl"],
+    ["--rdmt-bg-dark", "--rdmtbgd"],
+    ["--rdmt-radius", "--rdmtr"],
+    ["--rdmt-color-light", "--rdmtcl"],
+    ["--rdmt-color-dark", "--rdmtcd"],
+    ["--rdmt-color-hover-light", "--rdmtchl"],
+    ["--rdmt-color-hover-dark", "--rdmtchd"],
+    ["--rdmt-ease-in", "--rdmtei"],
+    ["--rdmt-ease-elastic-1", "--rdmtee1"],
+    ["--rdmt-ease-elastic-2", "--rdmtee2"],
+    ["--rdmt-ease-out", "--rdmteo"],
+    ["--rdmt-icon-fill", "--rdmtif"],
+    ["--rdmt-icon-fill-hover", "--rdmtifh"],
   ];
+
+  // const classReplacements: Array<[string, string]> = [
+  //   ["rdmt_moon_mask", "rmm"],
+  //   ["rdmt_sunandmoon", "rsm"],
+  //   ["rdmt_toggle", "rt"],
+  //   ["rdmt_sun", "rs"],
+  //   ["rdmt_beams", "rb"],
+  //   ["rdmt_moon", "rm"],
+  //   ["rdmt", "r"],
+  // ];
 
   return {
     name: "rdmt-css-var-minifier",
@@ -75,12 +80,18 @@ function cssVarMinifier() {
         }
         let code = (chunk as any).code as string;
         let mutated = false;
-        for (const [from, to] of replacements) {
+        for (const [from, to] of variableReplacements) {
           if (code.includes(from)) {
             code = code.split(from).join(to);
             mutated = true;
           }
         }
+        // for (const [from, to] of classReplacements) {
+        //   if (code.includes(from)) {
+        //     code = code.split(from).join(to);
+        //     mutated = true;
+        //   }
+        // }
         if (mutated) {
           (chunk as any).code = code;
         }
