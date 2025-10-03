@@ -21,12 +21,12 @@
     "dev": "cd dev && vite",
     "build": "tsc && vite build",
     "build:dev": "cd dev && vite build",
+    "build:docs": "npm run build && npm run docs",
+    "docs": "node scripts/sync-docs.js",
     "lint": "eslint src --ext ts,tsx",
     "test": "node scripts/test-package.js",
     "test:local": "node scripts/test-local.js",
     "test:browser": "node scripts/test-browser.js",
-    "docs": "node scripts/sync-docs.js",
-    "deploy:pages": "npm run build && npm run docs",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
