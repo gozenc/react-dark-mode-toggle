@@ -1,2 +1,2 @@
-export { DarkModeToggle as default } from "./component";
+export { DarkModeToggle as default, DarkModeToggle } from "./component";
 export type { DarkModeToggleProps } from "./component";

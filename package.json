@@ -22,7 +22,9 @@
     "build": "tsc && vite build",
     "build:dev": "cd dev && vite build",
     "lint": "eslint src --ext ts,tsx",
-    "test": "node test-package.js",
+    "test": "node scripts/test-package.js",
+    "test:local": "node scripts/test-local.js",
+    "test:browser": "node scripts/test-browser.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -32,6 +34,7 @@
     "theme",
     "component",
     "ui",
+    "no-dependencies",
     "animation"
   ],
   "author": "gozenc",

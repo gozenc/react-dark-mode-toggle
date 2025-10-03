@@ -1,19 +1,8 @@
+import * as React from "react";
 import { createPortal } from "react-dom";
-import { useEffect, useRef, useState } from "react";
 import type { HTMLAttributes, MouseEvent as ReactMouseEvent } from "react";
 
-/**
- * 
-React Dark Mode Toggle Styling Spec
-
-rdmt: React Dark Mode Toggle - Contaıner
-rdmt_t: React Dark Mode Toggle - Toggler
-rdmt_s: React Dark Mode Toggle - Sun
-rdmt_b: React Dark Mode Toggle - Sun Beams
-rdmt_m: React Dark Mode Toggle - Moon
-rdmt_sm: React Dark Mode Toggle - Sun And Moon
-
-*/
+const { useEffect, useRef, useState, createElement: h, Fragment } = React;
 
 const STYLE_TEXT = `
 :host {
@@ -225,57 +214,6 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
   const styleVariables = makeStyleVariables(padding, size, colors);
   const appliedSize = styleVariables["--rdmt-size"] ?? size ?? 24;
 
-  return (
-    <span ref={hostRef} className={className} {...spanProps}>
-      {shadowRoot &&
-        createPortal(
-          <>
-            <style>{STYLE_TEXT}</style>
-            <div className="rdmt" style={styleVariables} onClick={handleToggle}>
-              <div
-                className="rdmt_t"
-                title="Toggles light & dark"
-                aria-label="auto"
-                aria-live="polite"
-              >
-                <svg
-                  className="rdmt_sm"
-                  aria-hidden="true"
-                  width={appliedSize}
-                  height={appliedSize}
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="rdmt_s"
-                    cx="12"
-                    cy="12"
-                    r="6"
-                    mask="url(#rdmt_m_m)"
-                    fill="currentColor"
-                  />
-                  <g className="rdmt_b" stroke="currentColor">
-                    <line x1="12" y1="1" x2="12" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="23" />
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                    <line x1="1" y1="12" x2="3" y2="12" />
-                    <line x1="21" y1="12" x2="23" y2="12" />
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                  </g>
-                  <mask className="rdmt_m" id="rdmt_m_m">
-                    <rect x="0" y="0" width="100%" height="100%" fill="white" />
-                    <circle cx="24" cy="10" r="6" fill="black" />
-                  </mask>
-                </svg>
-              </div>
-            </div>
-          </>,
-          shadowRoot
-        )}
-    </span>
-  );
-
   function handleToggle(event: ReactMouseEvent<HTMLDivElement>) {
     if (props.preventDefault === true) {
       void 0;
@@ -302,6 +240,90 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
       onModeChange?.(nextTheme);
     }
   }
+
+  return h(
+    "span",
+    { ref: hostRef, className, ...spanProps },
+    shadowRoot &&
+      createPortal(
+        h(
+          Fragment,
+          null,
+          h("style", null, STYLE_TEXT),
+          h(
+            "div",
+            { className: "rdmt", style: styleVariables, onClick: handleToggle },
+            h(
+              "div",
+              {
+                className: "rdmt_t",
+                title: "Toggles light & dark",
+                "aria-label": "auto",
+                "aria-live": "polite",
+              },
+              h(
+                "svg",
+                {
+                  className: "rdmt_sm",
+                  "aria-hidden": "true",
+                  width: appliedSize,
+                  height: appliedSize,
+                  viewBox: "0 0 24 24",
+                },
+                h("circle", {
+                  className: "rdmt_s",
+                  cx: "12",
+                  cy: "12",
+                  r: "6",
+                  mask: "url(#rdmt_m_m)",
+                  fill: "currentColor",
+                }),
+                h(
+                  "g",
+                  { className: "rdmt_b", stroke: "currentColor" },
+                  h("line", { x1: "12", y1: "1", x2: "12", y2: "3" }),
+                  h("line", { x1: "12", y1: "21", x2: "12", y2: "23" }),
+                  h("line", { x1: "4.22", y1: "4.22", x2: "5.64", y2: "5.64" }),
+                  h("line", {
+                    x1: "18.36",
+                    y1: "18.36",
+                    x2: "19.78",
+                    y2: "19.78",
+                  }),
+                  h("line", { x1: "1", y1: "12", x2: "3", y2: "12" }),
+                  h("line", { x1: "21", y1: "12", x2: "23", y2: "12" }),
+                  h("line", {
+                    x1: "4.22",
+                    y1: "19.78",
+                    x2: "5.64",
+                    y2: "18.36",
+                  }),
+                  h("line", {
+                    x1: "18.36",
+                    y1: "5.64",
+                    x2: "19.78",
+                    y2: "4.22",
+                  })
+                ),
+                h(
+                  "mask",
+                  { className: "rdmt_m", id: "rdmt_m_m" },
+                  h("rect", {
+                    x: "0",
+                    y: "0",
+                    width: "100%",
+                    height: "100%",
+                    fill: "white",
+                  }),
+                  h("circle", { cx: "24", cy: "10", r: "6", fill: "black" })
+                )
+              )
+            )
+          )
+        ),
+        shadowRoot
+      )
+  );
 }
 
 function makeStyleVariables(

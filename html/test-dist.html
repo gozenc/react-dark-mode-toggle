@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Built Package</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+      transition: background-color 0.3s ease;
+    }
+
+    .dark body {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .demo-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dark .demo-section {
+      background: #2a2a2a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .status {
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+      background: #e3f2fd;
+    }
+
+    .dark .status {
+      background: #1565c0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Testing Built Package (dist/index.js)</h1>
+    <div class="status">
+      <p><strong>Bundle Size:</strong> <span id="bundle-size">Loading...</span></p>
+      <p><strong>Status:</strong> <span id="status">Loading...</span></p>
+    </div>
+
+    <div class="demo-section">
+      <h2>Default Toggle</h2>
+      <div class="toggle-row">
+        <span>Light</span>
+        <div id="toggle-1"></div>
+        <span>Dark</span>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>Custom Size</h2>
+      <div class="toggle-row">
+        <div id="toggle-2"></div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>Custom Colors</h2>
+      <div class="toggle-row">
+        <div id="toggle-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- React CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Import map to resolve React modules -->
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "data:text/javascript,export default window.React; export const createElement = window.React.createElement; export const useEffect = window.React.useEffect; export const useRef = window.React.useRef; export const useState = window.React.useState; export const Fragment = window.React.Fragment;",
+        "react-dom": "data:text/javascript,export const createPortal = window.ReactDOM.createPortal;"
+      }
+    }
+  </script>
+
+  <script type="module">
+    try {
+      // Get bundle size first
+      const response = await fetch('./dist/index.js');
+      const text = await response.text();
+      const sizeKB = (text.length / 1024).toFixed(2);
+      const sizeGzipped = await getGzippedSize(text);
+
+      // Check for react-jsx-runtime
+      const hasJsxRuntime = text.includes('react-jsx-runtime') || text.includes('jsx-runtime');
+      const runtimeStatus = hasJsxRuntime ? '❌ YES (should be excluded)' : '✅ NO (correctly excluded)';
+
+      document.getElementById('bundle-size').innerHTML = `${sizeKB} KB (${sizeGzipped} KB gzipped)`;
+      document.getElementById('status').innerHTML = `Loading component...<br>React JSX Runtime: ${runtimeStatus}`;
+
+      // Import the built component
+      const { DarkModeToggle } = await import('./dist/index.js');
+
+      document.getElementById('status').innerHTML = `✅ Component loaded successfully!<br>React JSX Runtime: ${runtimeStatus}`;
+
+      // Create React elements
+      const { createElement } = React;
+      const { createRoot } = ReactDOM;
+
+      // Default toggle
+      const root1 = createRoot(document.getElementById('toggle-1'));
+      root1.render(createElement(DarkModeToggle, {
+        onModeChange: (mode) => console.log('Mode changed to:', mode)
+      }));
+
+      // Custom size
+      const root2 = createRoot(document.getElementById('toggle-2'));
+      root2.render(createElement(DarkModeToggle, {
+        size: 32
+      }));
+
+      // Custom colors
+      const root3 = createRoot(document.getElementById('toggle-3'));
+      root3.render(createElement(DarkModeToggle, {
+        colors: {
+          backgroundColor: '#e3f2fd',
+          backgroundColorDark: '#1565c0',
+          color: '#1976d2',
+          colorDark: '#bbdefb'
+        }
+      }));
+
+    } catch (error) {
+      console.error('Error loading component:', error);
+      document.getElementById('status').textContent = 'Error: ' + error.message;
+    }
+
+    async function getGzippedSize(text) {
+      if ('CompressionStream' in window) {
+        const stream = new CompressionStream('gzip');
+        const writer = stream.writable.getWriter();
+        const reader = stream.readable.getReader();
+
+        writer.write(new TextEncoder().encode(text));
+        writer.close();
+
+        let compressedSize = 0;
+        let done = false;
+
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+          if (value) {
+            compressedSize += value.length;
+          }
+        }
+
+        return (compressedSize / 1024).toFixed(2);
+      }
+      return 'N/A';
+    }
+  </script>
+</body>
+
+</html>

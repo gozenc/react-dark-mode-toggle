@@ -151,6 +151,84 @@ npm install
 npm run dev
 ```
 
+## Testing
+
+### Local Package Testing
+
+Test the built package locally before publishing:
+
+#### 1. Browser Test (Visual Testing)
+
+```bash
+npm run test:browser
+```
+
+Opens `test-dist.html` which:
+
+- ✅ Loads the built `dist/index.js` directly
+- ✅ Shows bundle size and gzipped size
+- ✅ Tests different component configurations
+- ✅ Uses React from CDN (simulates real usage)
+- ✅ Verifies no react-jsx-runtime is included
+
+#### 2. Complete Package Test (Recommended)
+
+```bash
+npm run test:local
+```
+
+Comprehensive test that:
+
+- ✅ Builds the package (`npm run build`)
+- ✅ Packs it like npm would (`npm pack`)
+- ✅ Extracts and verifies all required files
+- ✅ Checks bundle size and content
+- ✅ Confirms react-jsx-runtime is excluded
+- ✅ Validates package structure for publishing
+
+#### 3. Quick Structure Test
+
+```bash
+npm run test
+```
+
+Basic test that verifies:
+
+- ✅ `dist/index.js` exists
+- ✅ `dist/index.d.ts` exists
+- ✅ Package.json configuration
+
+### Testing Workflow
+
+1. **Build the optimized package**:
+
+   ```bash
+   npm run build
+   ```
+
+2. **Test in browser** (visual verification):
+
+   ```bash
+   npm run test:browser
+   ```
+
+3. **Full package validation**:
+
+   ```bash
+   npm run test:local
+   ```
+
+4. **If all tests pass**, you're ready to publish!
+
+### Expected Results
+
+After optimization:
+
+- **Bundle size**: ~3-5 KB (optimized from 17 KB)
+- **No react-jsx-runtime**: ✅ Excluded from bundle
+- **Gzipped size**: ~1-2 KB
+- **All tests passing**: ✅
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
