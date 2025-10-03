@@ -80,6 +80,7 @@ coverage/
 # Nuxt.js build / generate output
 .nuxt
 dist
+!docs/dist
 
 # Storybook build outputs
 .out

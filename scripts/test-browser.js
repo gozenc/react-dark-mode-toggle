@@ -57,8 +57,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`🚀 Server running at http://${HOST}:${PORT}/`);
-  console.log(`📊 Test page: http://${HOST}:${PORT}/html/test-dist.html`);
+  console.log(`🚀 Test at http://${HOST}:${PORT}/`);
 });
 
 // Handle graceful shutdown

@@ -4,7 +4,6 @@ import type { HTMLAttributes, MouseEvent as ReactMouseEvent } from "react";
 import STYLE_CSS from "./style.css?inline";
 
 const { useEffect, useRef, useState, createElement: h, Fragment } = React;
-
 const ENUM_className = "rdmt";
 const ENUM_div = "div";
 const ENUM_circle = "circle";
@@ -122,7 +121,7 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
             h(
               ENUM_div,
               {
-                className: `${ENUM_className}t`,
+                className: `${ENUM_className}t`, // toggle
                 title: "Toggles light & dark",
                 "aria-label": "auto",
                 "aria-live": "polite",
@@ -130,24 +129,24 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
               h(
                 "svg",
                 {
-                  className: `${ENUM_className}sm`,
+                  className: `${ENUM_className}sm`, // sun and moon
                   "aria-hidden": "true",
                   width: appliedSize,
                   height: appliedSize,
                   viewBox: `${ENUM_null} ${ENUM_null} ${ENUM_defaultSize} ${ENUM_defaultSize}`,
                 },
                 h(ENUM_circle, {
-                  className: `${ENUM_className}s`,
+                  className: `${ENUM_className}s`, // sun
                   cx: ENUM_halfSize,
                   cy: ENUM_halfSize,
                   r: ENUM_quarter,
-                  mask: `url(#${ENUM_className}mm)`,
+                  mask: `url(#${ENUM_className}mm)`, // moon mask
                   fill: ENUM_currentColor,
                 }),
                 h(
                   "g",
                   {
-                    className: `${ENUM_className}b`,
+                    className: `${ENUM_className}b`, // beams
                     stroke: ENUM_currentColor,
                   },
                   h(ENUM_line, {
@@ -202,8 +201,8 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
                 h(
                   "mask",
                   {
-                    className: `${ENUM_className}m`,
-                    id: `${ENUM_className}mm`,
+                    className: `${ENUM_className}m`, // moon
+                    id: `${ENUM_className}mm`, // moon mask
                   },
                   h("rect", {
                     x: ENUM_null,

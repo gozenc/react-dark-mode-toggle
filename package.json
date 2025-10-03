@@ -25,6 +25,8 @@
     "test": "node scripts/test-package.js",
     "test:local": "node scripts/test-local.js",
     "test:browser": "node scripts/test-browser.js",
+    "docs": "node scripts/sync-docs.mjs",
+    "deploy:pages": "npm run build && npm run docs",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

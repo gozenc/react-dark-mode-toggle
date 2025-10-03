@@ -43,7 +43,9 @@ export function App() {
               backgroundColor: "#f3e5f5",
               backgroundColorDark: "#7b1fa2",
               color: "#9c27b0",
+              colorHover: "#b863ddff",
               colorDark: "#e1bee7",
+              colorHoverDark: "#b689beff",
             }}
           />
         </div>
