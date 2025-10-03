@@ -4,7 +4,7 @@ A beautiful, animated React dark mode toggle component with zero dependencies. F
 
 ## Demo
 
-![Dark Mode Toggle Animation](./demo.gif)
+![Dark Mode Toggle Animation](https://react-dark-mode-toggle.pages.dev/demo.gif)
 
 _A smooth, animated toggle between light and dark modes_
 
