@@ -18,6 +18,7 @@ _A smooth, animated toggle between light and dark modes_
 - 🌙 **Shadow DOM** - Isolated styles that won't conflict with your app
 - 💾 **LocalStorage** - Automatically persists theme preference
 - ⚡ **TypeScript** - Full TypeScript support with proper types
+- 📦 **Tiny footprint** - Ships at 4.88 KB (1.84 KB gzipped)
 
 ## Installation
 
@@ -224,9 +225,9 @@ Basic test that verifies:
 
 After optimization:
 
-- **Bundle size**: ~3-5 KB (optimized from 17 KB)
+- **Bundle size**: 4.88 KB
+- **Gzipped size**: 1.84 KB
 - **No react-jsx-runtime**: ✅ Excluded from bundle
-- **Gzipped size**: ~1-2 KB
 - **All tests passing**: ✅
 
 ## Contributing

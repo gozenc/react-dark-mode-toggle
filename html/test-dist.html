@@ -4,7 +4,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Built Package</title>
+  <title>React Dark Mode Toggle Demo | @gozenc/react-dark-mode</title>
+  <meta name="description"
+    content="Interactive playground for the @gozenc/react-dark-mode toggle — a 4.88 KB (1.84 KB gzipped) React theme switcher with polished animations and full customization.">
+  <meta name="keywords"
+    content="@gozenc/react-dark-mode, react dark mode toggle, react theme switch, dark mode component, theme button demo">
+  <meta name="author" content="gozenc">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#1565c0">
+  <link rel="canonical" href="https://react-dark-mode-toggle.pages.dev/test-dist.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="React Dark Mode Toggle Demo">
+  <meta property="og:description"
+    content="Preview the @gozenc/react-dark-mode component — just 4.88 KB (1.84 KB gzipped) with smooth, accessible animations.">
+  <meta property="og:url" content="https://react-dark-mode-toggle.pages.dev/test-dist.html">
+  <meta property="og:image" content="https://react-dark-mode-toggle.pages.dev/demo.gif">
+  <meta property="og:site_name" content="@gozenc/react-dark-mode">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="React Dark Mode Toggle Demo">
+  <meta name="twitter:description"
+    content="Try the featherlight @gozenc/react-dark-mode toggle — 4.88 KB (1.84 KB gzipped) and packed with customization.">
+  <meta name="twitter:image" content="https://react-dark-mode-toggle.pages.dev/demo.gif">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "@gozenc/react-dark-mode",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Cross-platform",
+      "description": "React dark mode toggle component with animated, accessible theme switching and a 4.88 KB (1.84 KB gzipped) footprint.",
+      "softwareVersion": "0.0.2",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "downloadUrl": "https://www.npmjs.com/package/@gozenc/react-dark-mode",
+      "publisher": {
+        "@type": "Organization",
+        "name": "gozenc",
+        "url": "https://github.com/gozenc"
+      }
+    }
+  </script>
   <style>
     :root {
       color-scheme: light dark;
@@ -182,6 +224,43 @@
       margin: 0.35rem 0;
     }
 
+    .page-footer {
+      margin: 0;
+      padding: 2rem 0 1rem;
+      color: #64748b;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .page-footer code {
+      background: rgba(15, 23, 42, 0.08);
+      padding: 0.25rem 0.4rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .page-footer a {
+      color: #1565c0;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .page-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .dark .page-footer {
+      color: #cbd5f5;
+    }
+
+    .dark .page-footer code {
+      background: rgba(148, 163, 184, 0.18);
+    }
+
+    .dark .page-footer a {
+      color: #9cc4ff;
+    }
+
     @media (max-width: 640px) {
       body {
         padding: 2rem 1rem;
@@ -195,16 +274,16 @@
 </head>
 
 <body>
-  <div class="container">
+  <main class="container" role="main">
     <header>
       <h1>@gozenc/react-dark-mode-toggle</h1>
-      <h2>Testing Built Package (dist/index.js)</h2>
-      <p class="lead">Visual check for the bundled component with multiple style variants. Theme the page using your
-        toggle and confirm the styles stay in sync.</p>
+      <h2>Live Demo & QA Playground</h2>
+      <p class="lead">Explore the animated React dark mode toggle that powers @gozenc/react-dark-mode. It ships at just
+        4.88 KB (1.84 KB gzipped) yet delivers smooth, accessible theme switching for any design system.</p>
     </header>
 
     <div class="status">
-      <p><strong>Bundle Size:</strong> <span id="bundle-size">Loading...</span></p>
+      <p><strong>Bundle Size:</strong> <span id="bundle-size">4.88 KB (1.84 KB gzipped)</span></p>
       <p><strong>Status:</strong> <span id="status">Loading...</span></p>
     </div>
 
@@ -235,7 +314,13 @@
       <p>Demonstrates the optional `radius` and `padding` props working together.</p>
       <div class="toggle-row" id="toggle-4"></div>
     </section>
-  </div>
+    <footer class="page-footer">
+      <p>Install the package with <code>npm install @gozenc/react-dark-mode-toggle</code> and drop the component into your
+        app to give users a delightful theme switch.</p>
+      <p><a href="https://www.npmjs.com/package/@gozenc/react-dark-mode">View the npm package</a> · <a
+          href="https://github.com/gozenc/react-dark-mode-toggle">Browse the source on GitHub</a></p>
+    </footer>
+  </main>
 
   <!-- React CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>

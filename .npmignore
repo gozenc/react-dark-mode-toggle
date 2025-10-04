@@ -1,0 +1,20 @@
+# Build metadata and local tooling
+.DS_Store
+node_modules
+npm-debug.log*
+package-lock.json
+
+# Source and tooling directories not needed in the published package
+dev/
+docs/
+html/
+scripts/
+src/
+
+# Configuration and project files kept out of the bundle
+*.config.js
+*.config.cjs
+*.config.mjs
+tsconfig.json
+README-drafts.md
+coverage/
