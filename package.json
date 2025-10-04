@@ -1,6 +1,6 @@
 {
   "name": "@gozenc/react-dark-mode-toggle",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A beautiful, animated React dark mode toggle component with zero dependencies",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,18 +17,20 @@
     "README.md",
     "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "cd dev && vite",
     "build": "tsc && vite build",
     "build:dev": "cd dev && vite build",
-    "build:docs": "npm run build && npm run docs",
     "docs": "node scripts/sync-docs.js",
     "lint": "eslint src --ext ts,tsx",
     "test": "node scripts/test-package.js",
     "test:local": "node scripts/test-local.js",
     "test:browser": "node scripts/test-browser.js",
     "bump": "node scripts/bump-version.js",
-    "prepublishOnly": "npm run build"
+    "release": "npm run build && npm run docs && npm run bump && npm publish"
   },
   "keywords": [
     "react",
@@ -49,7 +51,7 @@
   "bugs": {
     "url": "https://github.com/gozenc/react-dark-mode-toggle/issues"
   },
-  "homepage": "https://github.com/gozenc/react-dark-mode-toggle#readme",
+  "homepage": "https://react-dark-mode-toggle.pages.dev/",
   "peerDependencies": {
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
