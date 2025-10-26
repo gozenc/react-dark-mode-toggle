@@ -61,55 +61,43 @@
 .rdmtsm > .rdmtb {
   stroke: var(--rdmt-icon-fill);
   stroke-width: 2px;
+  transition: transform 0.5s var(--rdmt-ease-elastic-2),
+    opacity 0.5s var(--rdmt-ease-in);
 }
 .rdmtt:is(:hover, :focus-visible) .rdmtsm > .rdmtb {
   stroke: var(--rdmt-icon-fill-hover);
 }
+.rdmtsm .rdmtm > circle {
+  transform: translateX(-7px);
+  transition: transform 0.25s var(--rdmt-ease-out);
+}
+@supports (cx: 1) {
+  .rdmtsm .rdmtm > circle {
+    transform: translateX(0);
+    transition: cx 0.25s var(--rdmt-ease-out);
+  }
+}
 .dark .rdmtsm > .rdmts {
   transform: scale(1.5);
+  transition-timing-function: var(--rdmt-ease-in);
+  transition-duration: 0.25s;
 }
 .dark .rdmtsm > .rdmtb {
   opacity: 0;
+  transform: rotateZ(-25deg);
+  transition-duration: 0.15s;
 }
 .dark .rdmtsm > .rdmtm > circle {
   transform: translateX(-7px);
   transition: transform 0.25s var(--rdmt-ease-out);
+  transition-delay: 0.15s;
+  transition-duration: 0.25s;
 }
 @supports (cx: 1) {
   .dark .rdmtsm > .rdmtm > circle {
     transform: translateX(0);
     cx: 17;
     transition: cx 0.25s var(--rdmt-ease-out);
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .rdmtsm > .rdmts {
-    transition: transform 0.5s var(--rdmt-ease-elastic-1);
-  }
-  .rdmtsm > .rdmtb {
-    transition: transform 0.5s var(--rdmt-ease-elastic-2),
-      opacity 0.5s var(--rdmt-ease-in);
-  }
-  .rdmtsm .rdmtm > circle {
-    transform: translateX(-7px);
-    transition: transform 0.25s var(--rdmt-ease-out);
-  }
-  @supports (cx: 1) {
-    .rdmtsm .rdmtm > circle {
-      transform: translateX(0);
-      transition: cx 0.25s var(--rdmt-ease-out);
-    }
-  }
-  .dark .rdmtsm > .rdmts {
-    transform: scale(1.5);
-    transition-timing-function: var(--rdmt-ease-in);
-    transition-duration: 0.25s;
-  }
-  .dark .rdmtsm > .rdmtb {
-    transform: rotateZ(-25deg);
-    transition-duration: 0.15s;
-  }
-  .dark .rdmtsm > .rdmtm > circle {
     transition-delay: 0.15s;
     transition-duration: 0.25s;
   }
