@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import dts from "vite-plugin-dts";
 import { resolve } from "path";
 import terser from "@rollup/plugin-terser";

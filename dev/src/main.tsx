@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "./style.css";
 import DarkModeToggle from "../../src";
 
 export function App() {
@@ -12,7 +13,7 @@ export function App() {
         <h2>Default Toggle</h2>
         <div className="toggle-row">
           <span>Light</span>
-          <DarkModeToggle />
+          <DarkModeToggle className="text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 bg-white dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" />
           <span>Dark</span>
         </div>
       </div>
