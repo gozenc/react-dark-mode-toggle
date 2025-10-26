@@ -232,8 +232,8 @@ Basic test that verifies:
 
 After optimization:
 
-- **Bundle size**: 4.88 KB
-- **Gzipped size**: 1.84 KB
+- **Bundle size**: 4.56 KB
+- **Gzipped size**: 1.76 KB
 - **No react-jsx-runtime**: ✅ Excluded from bundle
 - **All tests passing**: ✅
 
