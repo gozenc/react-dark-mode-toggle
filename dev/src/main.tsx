@@ -13,7 +13,7 @@ export function App() {
         <h2>Default Toggle</h2>
         <div className="toggle-row">
           <span>Light</span>
-          <DarkModeToggle className="text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 bg-white dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" />
+          <DarkModeToggle />
           <span>Dark</span>
         </div>
       </div>
@@ -36,7 +36,9 @@ export function App() {
               backgroundColor: "#e3f2fd",
               backgroundColorDark: "#1565c0",
               color: "#1976d2",
+              colorHover: "#63a4ffff",
               colorDark: "#bbdefb",
+              colorHoverDark: "#90caf9ff",
             }}
           />
           <DarkModeToggle

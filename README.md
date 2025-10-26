@@ -18,12 +18,16 @@ _A smooth, animated toggle between light and dark modes_
 - 🌙 **Shadow DOM** - Isolated styles that won't conflict with your app
 - 💾 **LocalStorage** - Automatically persists theme preference
 - ⚡ **TypeScript** - Full TypeScript support with proper types
-- 📦 **Tiny footprint** - Ships at 4.88 KB (1.84 KB gzipped)
+- 📦 **Tiny footprint** - Ships at 4.59 KB (1.79 KB gzipped)
 
 ## Installation
 
 ```bash
 npm install @gozenc/react-dark-mode-toggle
+```
+
+```bash
+yarn add @gozenc/react-dark-mode-toggle
 ```
 
 ## Usage
@@ -79,16 +83,19 @@ function App() {
 
 ## Props
 
-| Prop              | Type                                | Default          | Description                              |
-| ----------------- | ----------------------------------- | ---------------- | ---------------------------------------- |
-| `size`            | `number \| string`                  | `24`             | Size of the toggle in pixels             |
-| `padding`         | `number \| string`                  | `calc(size / 3)` | Internal padding of the toggle           |
-| `onClick`         | `(event: MouseEvent) => void`       | -                | Custom click handler                     |
-| `onModeChange`    | `(mode: 'light' \| 'dark') => void` | -                | Called when theme changes                |
-| `preventDefault`  | `boolean`                           | `false`          | Prevent default theme switching behavior |
-| `localStorageKey` | `string`                            | `'color-theme'`  | Key used for localStorage persistence    |
-| `colors`          | `ColorConfig`                       | -                | Custom color configuration               |
-| `className`       | `string`                            | -                | CSS class for the container              |
+| Prop               | Type                                | Default                    | Description                              |
+| ------------------ | ----------------------------------- | -------------------------- | ---------------------------------------- |
+| `size`             | `number \| string`                  | `24`                       | Size of the toggle in pixels             |
+| `padding`          | `number \| string`                  | `calc(size / 4)`           | Internal padding of the toggle           |
+| `onClick`          | `(event: MouseEvent) => void`       | -                          | Custom click handler                     |
+| `onModeChange`     | `(mode: 'light' \| 'dark') => void` | -                          | Called when theme changes                |
+| `preventDefault`   | `boolean`                           | `false`                    | Prevent default theme switching behavior |
+| `localStorageKey`  | `string`                            | `'color-theme'`            | Key used for localStorage persistence    |
+| `colors`           | `ColorConfig`                       | -                          | Custom color configuration               |
+| `className`        | `string`                            | -                          | CSS class for the component              |
+| `wrapperClassName` | `string`                            | -                          | CSS class for the outer container        |
+| `darkClassName`    | `string`                            | `'dark'`                   | CSS class to toggle for dark mode        |
+| `rootElement`      | `HTMLElement`                       | `document.documentElement` | Root element to toggle dark class        |
 
 ### ColorConfig
 

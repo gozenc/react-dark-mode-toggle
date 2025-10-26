@@ -1,6 +1,6 @@
-:host {
+.rdmt {
   --rdmt-size: 24px;
-  --rdmt-padding: calc(var(--rdmt-size) / 3);
+  --rdmt-padding: calc(var(--rdmt-size) / 4);
   --rdmt-bg-light: #f3f4f6;
   --rdmt-bg-dark: #3e3e42;
   --rdmt-radius: 100%;
@@ -12,21 +12,17 @@
   --rdmt-ease-elastic-1: cubic-bezier(0.5, 1.25, 0.75, 1.25);
   --rdmt-ease-elastic-2: cubic-bezier(0.5, 1.5, 0.75, 1.25);
   --rdmt-ease-out: cubic-bezier(0, 0, 0, 1);
-}
-.rdmt {
   --rdmt-icon-fill: var(--rdmt-color-light);
   --rdmt-icon-fill-hover: var(--rdmt-color-hover-light);
   display: inline-flex;
-  justify-items: center;
+  justify-content: center;
   padding: var(--rdmt-padding);
   border-radius: var(--rdmt-radius);
-  height: var(--rdmt-size);
-  width: var(--rdmt-size);
   cursor: pointer;
   align-items: center;
   background-color: var(--rdmt-bg-light);
 }
-:host-context(.dark) .rdmt {
+.dark .rdmt {
   background-color: var(--rdmt-bg-dark);
 }
 .rdmtt {
@@ -46,7 +42,7 @@
   block-size: 100%;
   stroke-linecap: round;
 }
-:host-context(.dark) .rdmtt {
+.dark .rdmtt {
   --rdmt-icon-fill: var(--rdmt-color-dark);
   --rdmt-icon-fill-hover: var(--rdmt-color-hover-dark);
 }
@@ -69,18 +65,18 @@
 .rdmtt:is(:hover, :focus-visible) .rdmtsm > .rdmtb {
   stroke: var(--rdmt-icon-fill-hover);
 }
-:host-context(.dark) .rdmtsm > .rdmts {
+.dark .rdmtsm > .rdmts {
   transform: scale(1.5);
 }
-:host-context(.dark) .rdmtsm > .rdmtb {
+.dark .rdmtsm > .rdmtb {
   opacity: 0;
 }
-:host-context(.dark) .rdmtsm > .rdmtm > circle {
+.dark .rdmtsm > .rdmtm > circle {
   transform: translateX(-7px);
   transition: transform 0.25s var(--rdmt-ease-out);
 }
 @supports (cx: 1) {
-  :host-context(.dark) .rdmtsm > .rdmtm > circle {
+  .dark .rdmtsm > .rdmtm > circle {
     transform: translateX(0);
     cx: 17;
     transition: cx 0.25s var(--rdmt-ease-out);
@@ -104,16 +100,16 @@
       transition: cx 0.25s var(--rdmt-ease-out);
     }
   }
-  :host-context(.dark) .rdmtsm > .rdmts {
+  .dark .rdmtsm > .rdmts {
     transform: scale(1.5);
     transition-timing-function: var(--rdmt-ease-in);
     transition-duration: 0.25s;
   }
-  :host-context(.dark) .rdmtsm > .rdmtb {
+  .dark .rdmtsm > .rdmtb {
     transform: rotateZ(-25deg);
     transition-duration: 0.15s;
   }
-  :host-context(.dark) .rdmtsm > .rdmtm > circle {
+  .dark .rdmtsm > .rdmtm > circle {
     transition-delay: 0.15s;
     transition-duration: 0.25s;
   }
