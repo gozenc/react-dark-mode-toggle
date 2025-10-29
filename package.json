@@ -24,12 +24,11 @@
     "dev": "cd dev && vite",
     "build": "tsc && vite build",
     "build:dev": "cd dev && vite build",
-    "docs": "node scripts/sync-docs.js",
     "lint": "eslint src --ext ts,tsx",
-    "test": "node scripts/test-package.js",
-    "test:local": "node scripts/test-local.js",
-    "test:browser": "node scripts/test-browser.js",
-    "bump": "node scripts/bump-version.js",
+    "docs": "packer docs && cp demo.gif docs/demo.gif",
+    "verify": "packer verify",
+    "preview": "packer preview",
+    "bump": "packer bump",
     "release": "npm run build && npm run docs && npm run bump && npm publish"
   },
   "keywords": [
@@ -58,6 +57,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@gozenc/packer": "1.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
