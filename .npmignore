@@ -8,7 +8,6 @@ package-lock.json
 dev/
 docs/
 html/
-scripts/
 src/
 
 # Configuration and project files kept out of the bundle
