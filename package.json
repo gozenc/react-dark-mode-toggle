@@ -1,6 +1,6 @@
 {
   "name": "@gozenc/react-dark-mode-toggle",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A beautiful, animated React dark mode toggle component with zero dependencies",
   "type": "module",
   "main": "./dist/index.js",
