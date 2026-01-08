@@ -22,7 +22,7 @@
   },
   "scripts": {
     "dev": "cd dev && vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && packer docs",
     "build:dev": "cd dev && vite build",
     "lint": "eslint src --ext ts,tsx",
     "docs": "packer docs && cp demo.gif docs/demo.gif",
