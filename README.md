@@ -1,6 +1,6 @@
 # React Dark Mode Toggle
 
-A beautiful, animated React dark mode toggle component with zero dependencies. Features smooth animations and customizable styling.
+A beautiful, animated React dark mode toggle component with zero dependencies. Features smooth animations and customizable styling
 
 ## Demo
 
