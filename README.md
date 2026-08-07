@@ -89,6 +89,9 @@ function App() {
 | `padding`          | `number \| string`                  | `calc(size / 4)`           | Internal padding of the toggle           |
 | `onClick`          | `(event: MouseEvent) => void`       | -                          | Custom click handler                     |
 | `onModeChange`     | `(mode: 'light' \| 'dark') => void` | -                          | Called when theme changes                |
+| `onThemeChange`    | `(theme: 'light' \| 'dark' \| 'system') => void` | -              | Called when a managed theme changes      |
+| `theme`            | `'light' \| 'dark' \| 'system'`    | -                          | Controlled theme selection               |
+| `defaultTheme`     | `'light' \| 'dark' \| 'system'`    | -                          | Enables managed theme selection           |
 | `preventDefault`   | `boolean`                           | `false`                    | Prevent default theme switching behavior |
 | `localStorageKey`  | `string`                            | `'color-theme'`            | Key used for localStorage persistence    |
 | `colors`           | `ColorConfig`                       | -                          | Custom color configuration               |
@@ -96,6 +99,11 @@ function App() {
 | `wrapperClassName` | `string`                            | -                          | CSS class for the outer container        |
 | `darkClassName`    | `string`                            | `'dark'`                   | CSS class to toggle for dark mode        |
 | `rootElement`      | `HTMLElement`                       | `document.documentElement` | Root element to toggle dark class        |
+
+When `theme` or `defaultTheme` is provided, the component manages the root class and
+persists the selected theme. `system` follows `prefers-color-scheme` and updates when
+the operating system preference changes. Clicking while in `system` mode switches to
+the opposite explicit mode; a separate theme menu can set `system` again.
 
 ### ColorConfig
 

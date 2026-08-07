@@ -1,4 +1,10 @@
-import { Fragment, createElement as h } from "react";
+import {
+  Fragment,
+  createElement as h,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import type { HTMLAttributes, MouseEvent as ReactMouseEvent } from "react";
 import STYLE_CSS from "./style.css?inline";
 
@@ -32,6 +38,9 @@ injectRdmtStyles();
 export interface DarkModeToggleProps extends HTMLAttributes<HTMLSpanElement> {
   onClick?: (event: ReactMouseEvent<HTMLSpanElement>) => void;
   onModeChange?: (mode: ModeName) => void;
+  onThemeChange?: (theme: ThemeName) => void;
+  theme?: ThemeName;
+  defaultTheme?: ThemeName;
   size?: number | string;
   radius?: string;
   padding?: number | string;
@@ -53,6 +62,10 @@ export interface DarkModeToggleProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 type ModeName = "light" | "dark";
+export type ThemeName = ModeName | "system";
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 export function DarkModeToggle(props: DarkModeToggleProps) {
   const {
@@ -62,6 +75,9 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
     colors,
     onClick,
     onModeChange,
+    onThemeChange,
+    theme,
+    defaultTheme,
     size,
     padding,
     rootElement,
@@ -70,12 +86,50 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
     ...spanProps
   } = props;
 
+  const managesTheme = theme !== undefined || defaultTheme !== undefined;
+  const [uncontrolledTheme, setUncontrolledTheme] = useState<ThemeName>(() =>
+    readStoredTheme(localStorageKey, defaultTheme ?? "system")
+  );
+  const selectedTheme = theme ?? uncontrolledTheme;
+  const resolvedTheme = resolveTheme(selectedTheme);
+
   const styleVariables = buildStyleVariables(size, padding, radius, colors);
   const appliedSize = size ?? ENUM_defaultSize;
 
+  useIsomorphicLayoutEffect(() => {
+    if (!managesTheme || typeof document === "undefined") return;
+
+    const root = rootElement ?? document.documentElement;
+    persistTheme(localStorageKey, selectedTheme);
+    applyTheme(root, darkClassName ?? "dark", selectedTheme);
+
+    if (selectedTheme !== "system" || typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSystemThemeChange = () => {
+      applyTheme(root, darkClassName ?? "dark", "system");
+    };
+    mediaQuery.addEventListener?.("change", handleSystemThemeChange);
+
+    return () => mediaQuery.removeEventListener?.("change", handleSystemThemeChange);
+  }, [darkClassName, localStorageKey, managesTheme, rootElement, selectedTheme]);
+
   function handleToggle(event: ReactMouseEvent<HTMLDivElement>) {
     if (props.preventDefault !== true) {
-      toggleDarkMode(onModeChange, rootElement, localStorageKey, darkClassName);
+      if (managesTheme) {
+        const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
+        if (theme === undefined) setUncontrolledTheme(nextTheme);
+        persistTheme(localStorageKey, nextTheme);
+        applyTheme(
+          rootElement ?? (typeof document !== "undefined" ? document.documentElement : null),
+          darkClassName ?? "dark",
+          nextTheme
+        );
+        onThemeChange?.(nextTheme);
+        onModeChange?.(nextTheme);
+      } else {
+        toggleDarkMode(onModeChange, rootElement, localStorageKey, darkClassName);
+      }
     }
     if (onClick) {
       onClick(event as unknown as ReactMouseEvent<HTMLSpanElement>);
@@ -92,6 +146,7 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
         ENUM_div,
         {
           className: `${ENUM_className}${className ? ` ${className}` : ""}`,
+          "data-rdmt-dark": managesTheme && resolvedTheme === "dark" ? "true" : undefined,
           style: styleVariables,
           onClick: handleToggle,
         },
@@ -230,6 +285,36 @@ function buildStyleVariables(
   return styleVariables;
 }
 
+function readStoredTheme(localStorageKey: string | undefined, fallback: ThemeName) {
+  if (typeof window === "undefined") return fallback;
+
+  const storedTheme = window.localStorage.getItem(localStorageKey ?? "color-theme");
+  return storedTheme === "light" || storedTheme === "dark" || storedTheme === "system"
+    ? storedTheme
+    : fallback;
+}
+
+function persistTheme(localStorageKey: string | undefined, theme: ThemeName) {
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem(localStorageKey ?? "color-theme", theme);
+  }
+}
+
+function resolveTheme(theme: ThemeName): ModeName {
+  if (theme !== "system") return theme;
+  if (typeof window === "undefined") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(
+  root: HTMLElement | null,
+  darkClassName: string,
+  theme: ThemeName
+) {
+  if (!root) return;
+  root.classList.toggle(darkClassName, resolveTheme(theme) === "dark");
+}
+
 function toggleDarkMode(
   onModeChange: ((mode: ModeName) => void) | undefined,
   rootElement = document.documentElement,
@@ -239,7 +324,7 @@ function toggleDarkMode(
   if (typeof document !== "undefined") {
     const isDark = rootElement.classList.contains(darkClassName);
     const nextTheme: ModeName = isDark ? "light" : "dark";
-    rootElement.classList.toggle(darkClassName, nextTheme === darkClassName);
+    rootElement.classList.toggle(darkClassName, nextTheme === "dark");
     if (typeof window !== "undefined") {
       window.localStorage.setItem(localStorageKey, nextTheme);
     }
