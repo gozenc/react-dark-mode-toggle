@@ -102,8 +102,10 @@ function App() {
 
 When `theme` or `defaultTheme` is provided, the component manages the root class and
 persists the selected theme. `system` follows `prefers-color-scheme` and updates when
-the operating system preference changes. Clicking while in `system` mode switches to
-the opposite explicit mode; a separate theme menu can set `system` again.
+the operating system preference changes.
+
+Right-clicking (or two-finger tapping / Control-clicking) the toggle opens an inline theme menu
+to explicitly select **Light**, **Dark**, or **System**. Left-clicking toggles between Light and Dark.
 
 ### ColorConfig
 
