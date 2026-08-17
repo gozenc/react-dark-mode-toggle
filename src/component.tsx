@@ -3,6 +3,7 @@ import {
   createElement as h,
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 import type { HTMLAttributes, MouseEvent as ReactMouseEvent } from "react";
@@ -37,6 +38,7 @@ injectRdmtStyles();
 
 export interface DarkModeToggleProps extends HTMLAttributes<HTMLSpanElement> {
   onClick?: (event: ReactMouseEvent<HTMLSpanElement>) => void;
+  onContextMenu?: (event: ReactMouseEvent<HTMLSpanElement>) => void;
   onModeChange?: (mode: ModeName) => void;
   onThemeChange?: (theme: ThemeName) => void;
   theme?: ThemeName;
@@ -74,6 +76,7 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
     wrapperClassName,
     colors,
     onClick,
+    onContextMenu,
     onModeChange,
     onThemeChange,
     theme,
@@ -90,8 +93,14 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
   const [uncontrolledTheme, setUncontrolledTheme] = useState<ThemeName>(() =>
     readStoredTheme(localStorageKey, defaultTheme ?? "system")
   );
+  const [systemMode, setSystemMode] = useState<ModeName>(() =>
+    typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  );
+  const [menuOpen, setMenuOpen] = useState(false);
+  const wrapperRef = useRef<HTMLSpanElement | null>(null);
+
   const selectedTheme = theme ?? uncontrolledTheme;
-  const resolvedTheme = resolveTheme(selectedTheme);
+  const resolvedTheme = selectedTheme === "system" ? systemMode : selectedTheme;
 
   const styleVariables = buildStyleVariables(size, padding, radius, colors);
   const appliedSize = size ?? ENUM_defaultSize;
@@ -102,19 +111,85 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
     const root = rootElement ?? document.documentElement;
     persistTheme(localStorageKey, selectedTheme);
     applyTheme(root, darkClassName ?? "dark", selectedTheme);
-
-    if (selectedTheme !== "system" || typeof window === "undefined") return;
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleSystemThemeChange = () => {
-      applyTheme(root, darkClassName ?? "dark", "system");
-    };
-    mediaQuery.addEventListener?.("change", handleSystemThemeChange);
-
-    return () => mediaQuery.removeEventListener?.("change", handleSystemThemeChange);
   }, [darkClassName, localStorageKey, managesTheme, rootElement, selectedTheme]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSystemChange = () => {
+      const nextPref = mediaQuery.matches ? "dark" : "light";
+      setSystemMode(nextPref);
+      if (selectedTheme === "system") {
+        const root = rootElement ?? document.documentElement;
+        applyTheme(root, darkClassName ?? "dark", "system");
+        onModeChange?.(nextPref);
+      }
+    };
+
+    mediaQuery.addEventListener?.("change", handleSystemChange);
+    return () => mediaQuery.removeEventListener?.("change", handleSystemChange);
+  }, [darkClassName, onModeChange, rootElement, selectedTheme]);
+
+  useEffect(() => {
+    if (!menuOpen || typeof document === "undefined") return;
+
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
+
+  const longPressTimerRef = useRef<number | null>(null);
+
+  function handleSelectTheme(nextTheme: ThemeName) {
+    if (theme === undefined) setUncontrolledTheme(nextTheme);
+    persistTheme(localStorageKey, nextTheme);
+    applyTheme(
+      rootElement ?? (typeof document !== "undefined" ? document.documentElement : null),
+      darkClassName ?? "dark",
+      nextTheme
+    );
+    onThemeChange?.(nextTheme);
+    onModeChange?.(resolveTheme(nextTheme));
+    setMenuOpen(false);
+  }
+
+  function handleContextMenu(event: ReactMouseEvent<HTMLElement> | MouseEvent) {
+    if ("preventDefault" in event) event.preventDefault();
+    if ("stopPropagation" in event) event.stopPropagation();
+    setMenuOpen((prev) => !prev);
+    if (onContextMenu && "nativeEvent" in event) {
+      onContextMenu(event as unknown as ReactMouseEvent<HTMLSpanElement>);
+    }
+  }
+
   function handleToggle(event: ReactMouseEvent<HTMLDivElement>) {
+    if (event.ctrlKey || event.button === 2) {
+      handleContextMenu(event);
+      return;
+    }
+
     if (props.preventDefault !== true) {
       if (managesTheme) {
         const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
@@ -136,9 +211,35 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
     }
   }
 
+  function handleTouchStart() {
+    if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
+    longPressTimerRef.current = window.setTimeout(() => {
+      setMenuOpen(true);
+    }, 450);
+  }
+
+  function handleTouchEnd() {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  }
+
+  const themeOptions: Array<{ id: ThemeName; label: string; icon: string }> = [
+    { id: "light", label: "Light", icon: "☀️" },
+    { id: "dark", label: "Dark", icon: "🌙" },
+    { id: "system", label: "System", icon: "💻" },
+  ];
+
   return h(
     "span",
-    { className: wrapperClassName, ...spanProps },
+    {
+      ref: wrapperRef,
+      className: `rdmt-wrap${wrapperClassName ? ` ${wrapperClassName}` : ""}`,
+      "data-rdmt-dark": managesTheme && resolvedTheme === "dark" ? "true" : undefined,
+      onContextMenu: handleContextMenu,
+      ...spanProps,
+    },
     h(
       Fragment,
       null,
@@ -149,12 +250,16 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
           "data-rdmt-dark": managesTheme && resolvedTheme === "dark" ? "true" : undefined,
           style: styleVariables,
           onClick: handleToggle,
+          onContextMenu: handleContextMenu,
+          onTouchStart: handleTouchStart,
+          onTouchEnd: handleTouchEnd,
+          onTouchMove: handleTouchEnd,
         },
         h(
           ENUM_div,
           {
             className: `${ENUM_className}t`,
-            title: "Toggles light & dark",
+            title: "Left-click to toggle, right-click for options",
             "aria-label": "auto",
             "aria-live": "polite",
           },
@@ -252,7 +357,37 @@ export function DarkModeToggle(props: DarkModeToggleProps) {
             )
           )
         )
-      )
+      ),
+      menuOpen &&
+        h(
+          ENUM_div,
+          {
+            className: "rdmt-menu",
+            role: "menu",
+            "aria-label": "Theme options",
+          },
+          themeOptions.map((option) =>
+            h(
+              "button",
+              {
+                key: option.id,
+                type: "button",
+                className: "rdmt-menu-item",
+                role: "menuitemradio",
+                "aria-checked": selectedTheme === option.id,
+                "data-active": selectedTheme === option.id ? "true" : undefined,
+                onClick: (e) => {
+                  e.stopPropagation();
+                  handleSelectTheme(option.id);
+                },
+              },
+              h("span", { "aria-hidden": "true" }, option.icon),
+              h("span", null, option.label),
+              selectedTheme === option.id &&
+                h("span", { className: "rdmt-menu-check" }, "✓")
+            )
+          )
+        )
     )
   );
 }

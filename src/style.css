@@ -108,3 +108,99 @@
     transition-duration: 0.25s;
   }
 }
+
+.rdmt-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rdmt-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  z-index: 99999;
+  min-width: 124px;
+  padding: 4px;
+  background-color: #ffffff;
+  color: #1f2937;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: rdmt-fade-in 0.12s cubic-bezier(0, 0, 0.2, 1);
+  user-select: none;
+}
+
+.dark .rdmt-menu,
+.rdmt[data-rdmt-dark="true"] + .rdmt-menu,
+.rdmt-wrap[data-rdmt-dark="true"] .rdmt-menu {
+  background-color: #22272e;
+  color: #adbac7;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.rdmt-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.rdmt-menu-item:hover,
+.rdmt-menu-item:focus-visible {
+  background-color: #f3f4f6;
+  color: #111827;
+  outline: none;
+}
+
+.dark .rdmt-menu-item:hover,
+.dark .rdmt-menu-item:focus-visible,
+.rdmt-wrap[data-rdmt-dark="true"] .rdmt-menu-item:hover,
+.rdmt-wrap[data-rdmt-dark="true"] .rdmt-menu-item:focus-visible {
+  background-color: #2d333b;
+  color: #f0f6fc;
+}
+
+.rdmt-menu-item[data-active="true"] {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.dark .rdmt-menu-item[data-active="true"],
+.rdmt-wrap[data-rdmt-dark="true"] .rdmt-menu-item[data-active="true"] {
+  color: #58a6ff;
+}
+
+.rdmt-menu-check {
+  margin-left: auto;
+  font-size: 11px;
+}
+
+@keyframes rdmt-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
